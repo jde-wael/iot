@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: wil-playground
-          image: wil42/playground:v1
+          image: wil42/playground:v1   # passer a :v2, commit, push -> ArgoCD resynchronise
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8888
@@ -33,3 +33,18 @@ spec:
               port: 8888
             initialDelaySeconds: 15
             periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wil-playground
+  namespace: dev
+spec:
+  selector:
+    app: wil-playground
+  ports:
+    - name: http
+      port: 8888
+      targetPort: 8888
+      protocol: TCP
+  type: ClusterIP
